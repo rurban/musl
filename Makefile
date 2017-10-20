@@ -186,6 +186,11 @@ obj/%-clang: $(srcdir)/tools/%-clang.in config.mak
 	sed -e 's!@CC@!$(WRAPCC_CLANG)!g' -e 's!@PREFIX@!$(prefix)!g' -e 's!@INCDIR@!$(includedir)!g' -e 's!@LIBDIR@!$(libdir)!g' -e 's!@LDSO@!$(LDSO_PATHNAME)!g' $< > $@
 	chmod +x $@
 
+# emacs flymake-mode
+check-syntax:
+	test -n "$(CHK_SOURCES)" && \
+	  $(CC) $(CFLAGS_ALL) -o /dev/null -S $(CHK_SOURCES)
+
 $(DESTDIR)$(bindir)/%: obj/%
 	$(INSTALL) -D $< $@
 
@@ -232,4 +237,4 @@ clean:
 distclean: clean
 	rm -f config.mak
 
-.PHONY: all clean install install-libs install-headers install-tools
+.PHONY: all clean install install-libs install-headers install-tools check-syntax
