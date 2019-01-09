@@ -116,11 +116,13 @@ static const struct {
     unsigned short len;
 } casemapsl[] = {
 	CASEMAP(0x13a0,0x13ef,0xab70),    /* CHEROKEE reverse */
+        CASEMAP(0x1c90,0x1cbf,0x10d0),    /* GEORGIAN MTAVRULI (Unicode 11) */
 	CASEMAP(0xab70,0xabbf,0x13a0),    /* CHEROKEE */
 	CASEMAP(0x10400,0x10427,0x10428),
 	CASEMAP(0x104b0,0x104d3,0x104d8), /* Unicode 9 */
 	CASEMAP(0x10c80,0x10cb2,0x10cc0), /* Unicode 8 */
 	CASEMAP(0x118a0,0x118bf,0x118c0), /* Unicode 7 */
+        CASEMAP(0x16e40,0x16e5f,0x16e60), /* MEDEFAIDRIN reverse (Unicode 11) */
 	CASEMAP(0x1e900,0x1e921,0x1e922), /* Unicode 9 */
 	{ 0,0,0 }
 };
@@ -313,8 +315,8 @@ static const unsigned short pairs[][2] = {
 	{ 0xa7b2, 0x29d }, /* Unicode 7.0 */
 	{ 0xa7b3, 0xab53 }, /* Unicode 8.0 */
 	{ 0xa7b4, 0xa7b5 }, /* Unicode 8.0 */
-
         { 0xa7b6, 0xa7b7 }, /* Unicode 8.0 */
+        { 0xa7b8, 0xa7b9 }, /* Unicode 11.0 */
 
 	{ 0xa7ab, 0x25c },
 	{ 0xa7ac, 0x261 },
