@@ -7,7 +7,7 @@
 #define CASEMAP(u1,u2,l) { (u1), (l)-(u1), (u2)-(u1)+1 }
 #define CASELACE(u1,u2) CASEMAP((u1),(u2),(u1)+1)
 
-/* Unicode 10.0 */
+/* Unicode 12.0-d1 */
 
 /* must be sorted */
 static const struct {
@@ -103,7 +103,8 @@ static const struct {
 	CASELACE(0xa796,0xa79e),
 	CASELACE(0xa7a0,0xa7a8),
 
-	CASELACE(0xa7b4,0xa7b6),
+	CASELACE(0xa7b4,0xa7be),
+	CASELACE(0xa7c2,0xa7c3),
 
 	CASEMAP(0xff21,0xff3a,0xff41),
 	{ 0,0,0 }
@@ -265,6 +266,16 @@ static const unsigned short pairs[][2] = {
 	{ 0x10c7, 0x2d27 },
 	{ 0x10cd, 0x2d2d },
 
+        { 0x1c80, 0x0432 },
+        { 0x1c81, 0x0434 },
+        { 0x1c82, 0x043e },
+        { 0x1c83, 0x0441 },
+        { 0x1c84, 0x0442 },
+        { 0x1c85, 0x0442 },
+        { 0x1c86, 0x044a },
+        { 0x1c87, 0x0463 },
+        { 0x1c88, 0xa64b },
+
 	{ 0x1e60, 0x1e9b },
 	{ 0x1e9b, 0x1e61 },
 	{ 0x1e9e, 0xdf },
@@ -326,17 +337,9 @@ static const unsigned short pairs[][2] = {
 	{ 0xa7b1, 0x287 },
 	{ 0xa7b2, 0x29d },
 	{ 0xa7b3, 0xab53 },
-
-	/* special cyrillic lowercase forms */
-	{ 0x412, 0x1c80 },
-	{ 0x414, 0x1c81 },
-	{ 0x41e, 0x1c82 },
-	{ 0x421, 0x1c83 },
-	{ 0x422, 0x1c84 },
-	{ 0x422, 0x1c85 },
-	{ 0x42a, 0x1c86 },
-	{ 0x462, 0x1c87 },
-	{ 0xa64a, 0x1c88 },
+        { 0xa7c4, 0xa794 }, /* Unicode 12.0 */
+        { 0xa7c5, 0x0282 }, /* Unicode 12.0 */
+        { 0xa7c6, 0x1d8e }, /* Unicode 12.0 */
 
 	{ 0,0 }
 };
@@ -359,14 +362,10 @@ static wchar_t __towcase(wchar_t wc, int lower)
 		if (wc>0x10c5 && wc != 0x10c7 && wc != 0x10cd) return wc;
 		else return wc + 0x2d00 - 0x10a0;
         }
-	if (!lower && (unsigned)wc - 0x2d00 < 0x26) {
+	else if (!lower && (unsigned)wc - 0x2d00 < 0x26) {
 		if (wc>0x2d25 && wc != 0x2d27 && wc != 0x2d2d) return wc;
 		else return wc + 0x10a0 - 0x2d00;
         }
-	if (lower && (unsigned)wc - 0x13a0 < 0x50)
-		return wc + 0xab70 - 0x13a0;
-	if (!lower && (unsigned)wc - 0xab70 < 0x50)
-		return wc + 0x13a0 - 0xab70;
 	for (i=0; casemaps[i].len; i++) {
 		int base = casemaps[i].upper + (lmask & casemaps[i].lower);
 		assert(i>0 ? casemaps[i].upper >= casemaps[i-1].upper : 1);
@@ -396,16 +395,6 @@ static wchar_t __towcase(wchar_t wc, int lower)
 		if (lower && casemaps[i].upper > wc)
 			break;
 	}
-	if ((unsigned)wc - (0x10428 - 0x28*lower) < 0x28)
-		return wc - 0x28 + 0x50*lower;
-	if ((unsigned)wc - (0x104d8 - 0x28*lower) < 0x24)
-		return wc - 0x28 + 0x50*lower;
-	if ((unsigned)wc - (0x10cc0 - 0x40*lower) < 0x33)
-		return wc - 0x40 + 0x80*lower;
-	if ((unsigned)wc - (0x118c0 - 0x20*lower) < 0x20)
-		return wc - 0x20 + 0x40*lower;
-	if ((unsigned)wc - (0x1e922 - 0x22*lower) < 0x22)
-		return wc - 0x22 + 0x44*lower;
 	return wc;
 }
 
